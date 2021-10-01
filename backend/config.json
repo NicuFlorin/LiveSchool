@@ -1,0 +1,20 @@
+{
+  "cors":{
+      "whitelist": ["http://localhost:3000"],
+      "allowedMethods": ["GET","POST","PUT","DELETE"]
+  },
+"sessionSecret": "xh6kbmZ0XGOJGJ0ZsQY7KyhtcvCpt7vR",
+"port": 8000,
+  "database": {
+      "host": "localhost",
+      "name": "Catalog",
+      "user": "nicu",
+      "password": "12345"
+  },
+  "login": {
+      "unprotectedUrls": ["/api/login", "/api/logout", "/api/register", "/api/isLoggedIn", "/api/google/login","/api/school/add"]
+  },
+  "googleLogin":{
+      "clientId": "your-google-client-id"
+  }
+}

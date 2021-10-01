@@ -1,0 +1,44 @@
+const express = require("express");
+const session = require("express-session");
+const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
+const cors = require("cors");
+const router = require("./routes");
+
+const config = require("./config.json");
+const app = express();
+const { database, entities } = require("./database");
+// const router = require("./routes");
+
+app.use(
+  cors({
+    origin: config.cors.whitelist,
+    methods: config.cors.allowedMethods,
+    credentials: true,
+  })
+);
+
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
+app.use(
+  session({
+    secret: config.sessionSecret,
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: false }, // Put true if https
+  })
+);
+
+app.use(cookieParser());
+
+app.get("/api/sync", (req, res) => {
+  database
+    .sync({ force: true })
+    .then(() => res.status(201).send("Sincronizare reusita cu baza de date!"))
+    .catch((error) => res.status(500).send(`Sincronizare nereusita. ${error}`));
+});
+
+app.use("/", router);
+
+app.listen(config.port, () => console.log(`Now listening on ${config.port}`));
